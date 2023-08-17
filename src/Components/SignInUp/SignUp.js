@@ -19,6 +19,8 @@ import { signUpData } from "../StaticData";
 
 import notify from "../../Utils/helper/notifyToast";
 import { validateEmail } from "./Helpers/ValidateEmail";
+import axios from "axios";
+import { BASE_URL } from "../../configs";
 
 
 function SignUp() {
@@ -49,62 +51,69 @@ function SignUp() {
 
     if (inputValidation) {
       setIsDisabled(true);
-      const userData = {
-        name: elements.Name.value,
-        email: elements.SignUpEmail.value,
-        phone: elements.Mobile.value,
-        state: elements.State.value,
-        city: elements.City.value,
-      };
-      if (isStationSelected) {
-        userData.address = elements.Address.value;
-        userData.location = elements.URL.value;
+      const data = {
+        FirstName : elements.FirstName.value.trim(),
+        LastName : elements.LastName.value.trim(),
+        Email : elements.SignUpEmail.value.trim(),
+        ContactNo : elements.Mobile.value.trim(),
+        Password : elements.SignUpPassword.value.trim(),
+        ProfilePhoto : "https://avatars.githubusercontent.com/u/51825251?v=4"
+      }
+
+      try {
+        const res = await axios.post(BASE_URL+"/user", data);
+        const message = res.data.message;
+        notify(message)
+        // to-do : signup successful, redirect to login or email verification
+      }catch(error) {
+        const errorMessage = error.response.data.message;
+        notify(errorMessage)
+        setIsDisabled(false);
       }
     }
   };
 
   const handleDataValidation = () => {
-    if (formRef.current.elements.Name.value === "") {
-      notify("Please enter your name", "warning");
-      return false;
-    }
-    if (
-      !formRef.current.elements.SignUpEmail.value ||
-      !validateEmail(formRef.current.elements.SignUpEmail.value)
-    ) {
-      notify("Please enter valid Email address", "warning");
-      return false;
-    }
-    if (formRef.current.elements.State.value === "") {
-      notify("Please enter your state name", "warning");
-      return false;
-    }
-    if (formRef.current.elements.City.value === "") {
-      notify("Please enter your city name", "warning");
-      return false;
-    }
-    if (formRef.current.elements.SignUpPassword.value.length < 6) {
-      notify("Password should be atleast 6 characters long", "warning");
-      return false;
-    }
-    if (
-      formRef.current.elements.ConfirmPassword.value.length !==
-      formRef.current.elements.SignUpPassword.value.length
-    ) {
-      notify("Confirm password should be same as password", "warning");
-      return false;
-    }
-    if (formRef.current.elements.UserType.value === "Station") {
-      if (formRef.current.elements.Address.value === "") {
-        notify("Please enter your address", "warning");
-        return false;
-      }
+    const elements = formRef.current.elements;
 
-      if (formRef.current.elements.URL.value === "") {
-        notify("Please enter your Google map URL", "warning");
-        return false;
-      }
+    const firstName = elements.FirstName.value.trim();
+    const lastName = elements.LastName.value.trim();
+    const email = elements.SignUpEmail.value.trim();
+    const mobile = elements.Mobile.value.trim();
+    const pass = elements.SignUpPassword.value.trim();
+    const confirmPass = elements.ConfirmPassword.value.trim();
+
+
+    if (firstName.length < 2 || firstName.length > 20) {
+      notify("FisrtName length must be between 2 & 20")
+      return false;
     }
+
+    if (lastName.length < 2 || lastName.label > 20) {
+      notify("LastName length must be between 2 & 20")
+      return false;
+    }
+
+    if (email.length < 5 || email.length > 40) {
+      notify("Enter Valid Email")
+      return false;
+    }
+    
+    if (mobile.length != 10) {
+      notify("Enter Valid Contact No")
+      return false;
+    }
+
+    if (pass.length < 8 || pass.length > 15) {
+      notify("Password should be of length 8 to 15");
+      return false;
+    }
+
+    if (confirmPass != pass) {
+      notify("Password and Confirm Password Not same");
+      return false;
+    }
+
     return true;
   };
 
@@ -123,15 +132,24 @@ function SignUp() {
         <form ref={formRef} className={Styles.Form} onSubmit={signUp}>
           <StyledMUIInput
             fullWidth
-            id="Name"
-            label="Name"
+            id="FirstName"
+            label="FirstName"
             variant="standard"
+            margin="dense"
+            disabled={isDisabled}
+          />
+          <StyledMUIInput
+            fullWidth
+            id="LastName"
+            label="LastName"
+            variant="standard"
+            margin="dense"
             disabled={isDisabled}
           />
           <StyledMUIInput
             fullWidth
             id="SignUpEmail"
-            label="Email address"
+            label="Email"
             variant="standard"
             type="email"
             margin="dense"
@@ -140,24 +158,7 @@ function SignUp() {
           />
           <StyledMUIInput
             fullWidth
-            id="State"
-            label="State"
-            variant="standard"
-            margin="dense"
-            disabled={isDisabled}
-          />
-          <StyledMUIInput
-            fullWidth
-            id="City"
-            label="City/Town"
-            variant="standard"
-            margin="dense"
-            disabled={isDisabled}
-          />
-
-          <StyledMUIInput
-            fullWidth
-            label="Mobile ( Optional )"
+            label="Mobile"
             value={values.Mobile}
             onChange={handleChange}
             name="Mobile"
