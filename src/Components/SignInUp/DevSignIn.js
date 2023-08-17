@@ -1,18 +1,18 @@
 import React from "react";
 
 import Styles from "./SignInUp.module.css";
-
+import Button from '@mui/material/Button';
 import { FormControlLabel, RadioGroup, Typography } from "@mui/material";
 import StyledMUIInput from "./Helpers/StyledMUIInput";
 
 import { useLocation, useHistory } from "react-router-dom";
-
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import {
   MobileNumberTextMask,
   CustomisedRadio,
 } from "./Helpers/StyledMUIInput";
 
-import Button from "../Button";
+import Buttonn from "../Button";
 import BottomText from "./Helpers/BottomText";
 
 import { DsignUpData } from "../StaticData";
@@ -28,6 +28,9 @@ function DevSignIn() {
   const [isDisabled, setIsDisabled] = React.useState(false);
   const [isStationSelected,setIsStationSelected] = React.useState(false)
   
+  const [shown,setshown] = React.useState(false);
+  const [urls,seturls] = React.useState([]);
+  const [urll,seturll] = React.useState();
   const [values, setValues] = React.useState({
     textmask: "",
     numberformat: "",
@@ -196,24 +199,13 @@ function DevSignIn() {
           name="UserType"
           className={Styles.RadioWrapper}
           onChange={(e) => {
-            setIsStationSelected(e.target.value === "Storage");
+            setIsStationSelected(e.target.value === "Add");
           }}
         >
+          
           <FormControlLabel
             disabled={isDisabled}
-            value="User"
-            control={<CustomisedRadio />}
-            label={
-              <Typography
-                sx={{ fontSize: "var(--font-16)", fontWeight: 400 }}
-              >
-                User
-              </Typography>
-            }
-          />
-          <FormControlLabel
-            disabled={isDisabled}
-            value="Storage"
+            value="Add"
             control={<CustomisedRadio />}
             label={
               <Typography
@@ -234,9 +226,14 @@ function DevSignIn() {
               margin="dense"
               disabled={isDisabled}
             />
+            <AddCircleOutlineIcon style={{fontSize:"3rem", margin:"1rem", color:"blue"}} />
+            
+
+          
+					
           </>
         ) : null}
-        <Button
+        <Buttonn
         content="Continue"
         mainColor="linear-gradient(
           63.31deg,
