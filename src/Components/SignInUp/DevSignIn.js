@@ -1,12 +1,12 @@
 import React from "react";
-
+import axios from "axios";
 import Styles from "./SignInUp.module.css";
-import Button from '@mui/material/Button';
+import Button from "@mui/material/Button";
 import { FormControlLabel, RadioGroup, Typography } from "@mui/material";
 import StyledMUIInput from "./Helpers/StyledMUIInput";
 
 import { useLocation, useHistory } from "react-router-dom";
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import {
   MobileNumberTextMask,
   CustomisedRadio,
@@ -20,29 +20,35 @@ import { DsignUpData } from "../StaticData";
 import notify from "../../Utils/helper/notifyToast";
 import { validateEmail } from "./Helpers/ValidateEmail";
 
-
 function DevSignIn() {
   const location = useLocation();
   const formRef = React.useRef(123);
   const history = useHistory();
   const [isDisabled, setIsDisabled] = React.useState(false);
-  const [isStationSelected,setIsStationSelected] = React.useState(false)
-  
-  const [shown,setshown] = React.useState(false);
-  const [urls,seturls] = React.useState([]);
-  const [urll,seturll] = React.useState();
-  const [values, setValues] = React.useState({
-    textmask: "",
-    numberformat: "",
-    Mobile: "",
-  });
+  const [isStationSelected, setIsStationSelected] = React.useState(false);
 
-  
-  const handleChange = (event) => {
-    setValues({
-      ...values,
-      [event.target.name]: event.target.value,
-    });
+  const [shown, setshown] = React.useState(false);
+  const [urls, seturls] = React.useState([]);
+  const [devData, setDevdata] = React.useState({});
+
+  // const sendRequest = async () => {
+  //     const res = await axios
+  //     .post("http://localhost:5000/api/client/insertClient", devData)
+  //     .catch((err) => console.log(err));
+  //   console.log(res);
+  //   const dat = await res.nClinet;
+  //   return dat;
+  // };
+
+  const handleAdd = (event) => {
+    const elements = formRef.current.elements;
+    const urlll = elements.redirecturl.value;
+    console.log(urlll);
+    if (urlll != "") {
+      seturls([...urls, urlll]);
+    }
+    elements.redirecturl.value = "";
+    console.log(urls);
   };
 
   const signUp = async (e) => {
@@ -52,22 +58,53 @@ function DevSignIn() {
 
     if (inputValidation) {
       setIsDisabled(true);
-      const userData = {
-        name: elements.Name.value,
+      setDevdata({
+        ClientName: elements.Cname.value,
         email: elements.SignUpEmail.value,
-        phone: elements.Mobile.value,
-        state: elements.State.value,
-        city: elements.City.value,
+        ClientID: elements.Cid.value,
+        Secret: elements.Csecret.value,
+        scope: elements.Scope.value,
+        AuthorizationCode: elements.Authcode.value,
+        RedirectURIs: urls,
+      });
+
+      console.log("Developer data is here");
+      console.log(devData);
+
+      const requrl = "http://localhost:5000/api/client/insertClient";
+      const reqOptions = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ClientName: elements.Cname.value,
+          email: elements.SignUpEmail.value,
+          ClientID: elements.Cid.value,
+          Secret: elements.Csecret.value,
+          scope: elements.Scope.value,
+          AuthorizationCode: elements.Authcode.value,
+          RedirectURIs: urls,
+        }),
       };
-      if (isStationSelected) {
-        userData.address = elements.Address.value;
-        userData.location = elements.URL.value;
+      const result = await fetch(requrl, reqOptions);
+      const response = await result.json();
+
+      if (response.status === 'success') {
+        alert("Client added successfully 😃!!!")
       }
+      else {
+        alert("Failed to add client 😢!!!")
+      }
+      // sendRequest()
+      // .then((data) => {
+      //   console.log(data);
+      //   window.location = "/";
+      // })
+      // .then(() => console.log("done"));
     }
   };
 
   const handleDataValidation = () => {
-    if (formRef.current.elements.Name.value === "") {
+    if (formRef.current.elements.Cname.value === "") {
       notify("Please enter your name", "warning");
       return false;
     }
@@ -78,35 +115,29 @@ function DevSignIn() {
       notify("Please enter valid Email address", "warning");
       return false;
     }
-    if (formRef.current.elements.State.value === "") {
-      notify("Please enter your state name", "warning");
+    if (formRef.current.elements.Cid.value === "") {
+      notify("Please enter your client id", "warning");
       return false;
     }
-    if (formRef.current.elements.City.value === "") {
-      notify("Please enter your city name", "warning");
+    if (formRef.current.elements.Csecret.value === "") {
+      notify("Please enter your secret value", "warning");
       return false;
     }
-    if (formRef.current.elements.SignUpPassword.value.length < 6) {
-      notify("Password should be atleast 6 characters long", "warning");
+    if (formRef.current.elements.Authcode.value === "") {
+      notify("Please enter your authorization code", "warning");
       return false;
     }
-    if (
-      formRef.current.elements.ConfirmPassword.value.length !==
-      formRef.current.elements.SignUpPassword.value.length
-    ) {
-      notify("Confirm password should be same as password", "warning");
+    if (formRef.current.elements.protocol.value === "") {
+      notify("Please enter your protocol", "warning");
       return false;
     }
-    if (formRef.current.elements.UserType.value === "Station") {
-      if (formRef.current.elements.Address.value === "") {
-        notify("Please enter your address", "warning");
-        return false;
-      }
-
-      if (formRef.current.elements.URL.value === "") {
-        notify("Please enter your Google map URL", "warning");
-        return false;
-      }
+    if (formRef.current.elements.Scope.value === "") {
+      notify("Please enter your Scope", "warning");
+      return false;
+    }
+    if (formRef.current.elements.redirecturl.value === "") {
+      notify("Please enter your redirect url", "warning");
+      return false;
     }
     return true;
   };
@@ -124,99 +155,66 @@ function DevSignIn() {
       <div className={Styles.UpperSection}>
         <span className={Styles.Title}>{DsignUpData.title}</span>
         <form ref={formRef} className={Styles.Form} onSubmit={signUp}>
-        <StyledMUIInput
-          fullWidth
-          id="Cname"
-          label="Client Name"
-          variant="standard"
-          disabled={isDisabled}
-        />
-        <StyledMUIInput
-          fullWidth
-          id="SignUpEmail"
-          label="Email address"
-          variant="standard"
-          type="email"
-          margin="dense"
-          autoComplete="username"
-          disabled={isDisabled}
-        />
-        <StyledMUIInput
-          fullWidth
-          id="Cid"
-          label="Client ID"
-          variant="standard"
-          margin="dense"
-          disabled={isDisabled}
-        />
-        <StyledMUIInput
-          fullWidth
-          id="Csecret"
-          label="Client Secret"
-          variant="standard"
-          margin="dense"
-          disabled={isDisabled}
-        />
-
-        <StyledMUIInput
-          fullWidth
-          id="Scope"
-          label="Scope"
-          variant="standard"
-          margin="dense"
-          disabled={isDisabled}
-        />
-       
-        <StyledMUIInput
-          fullWidth
-          id="protocol"
-          label="Protocol"
-          variant="standard"
-          margin="dense"
-          disabled={isDisabled}
-        />
-        <StyledMUIInput
-          fullWidth
-          id="Authcode"
-          label="Authorization Code"
-          variant="standard"
-          margin="dense"
-          disabled={isDisabled}
-        />
-
-        <StyledMUIInput
-          fullWidth
-          id="redirecturl"
-          label="Redirect URL's"
-          variant="standard"
-          margin="dense"
-          disabled={isDisabled}
-        />
-        <RadioGroup
-          row
-          aria-label="Type"
-          defaultValue="User"
-          name="UserType"
-          className={Styles.RadioWrapper}
-          onChange={(e) => {
-            setIsStationSelected(e.target.value === "Add");
-          }}
-        >
-          
-          <FormControlLabel
+          <StyledMUIInput
+            fullWidth
+            id="Cname"
+            label="Client Name"
+            variant="standard"
             disabled={isDisabled}
-            value="Add"
-            control={<CustomisedRadio />}
-            label={
-              <Typography
-                sx={{ fontSize: "var(--font-16)", fontWeight: 400 }}
-              >
-                Add More
-              </Typography>
-            }
           />
-        </RadioGroup>
-        {isStationSelected ? (
+          <StyledMUIInput
+            fullWidth
+            id="SignUpEmail"
+            label="Email address"
+            variant="standard"
+            type="email"
+            margin="dense"
+            autoComplete="username"
+            disabled={isDisabled}
+          />
+          <StyledMUIInput
+            fullWidth
+            id="Cid"
+            label="Client ID"
+            variant="standard"
+            margin="dense"
+            disabled={isDisabled}
+          />
+          <StyledMUIInput
+            fullWidth
+            id="Csecret"
+            label="Client Secret"
+            variant="standard"
+            margin="dense"
+            disabled={isDisabled}
+          />
+
+          <StyledMUIInput
+            fullWidth
+            id="Scope"
+            label="Scope"
+            variant="standard"
+            margin="dense"
+            disabled={isDisabled}
+          />
+
+          <StyledMUIInput
+            fullWidth
+            id="protocol"
+            label="Protocol"
+            variant="standard"
+            margin="dense"
+            disabled={isDisabled}
+          />
+          <StyledMUIInput
+            fullWidth
+            id="Authcode"
+            label="Authorization Code"
+            variant="standard"
+            margin="dense"
+            disabled={isDisabled}
+          />
+
           <>
             <StyledMUIInput
               fullWidth
@@ -226,25 +224,24 @@ function DevSignIn() {
               margin="dense"
               disabled={isDisabled}
             />
-            <AddCircleOutlineIcon style={{fontSize:"3rem", margin:"1rem", color:"blue"}} />
-            
-
-          
-					
+            <AddCircleOutlineIcon
+              onClick={handleAdd}
+              style={{ fontSize: "3rem", margin: "1rem", color: "blue" }}
+            />
           </>
-        ) : null}
-        <Buttonn
-        content="Continue"
-        mainColor="linear-gradient(
+
+          <Buttonn
+            content="Continue"
+            mainColor="linear-gradient(
           63.31deg,
           #00d1ff -9.99%,
           #06c4ff -9.98%,
           rgba(3, 195, 255, 0.23) 131.09%
         )"
-        fontSize="var(--font-20)"
-        wrapperClass={Styles.SignInUpButton}
-      />
-      </form>
+            fontSize="var(--font-20)"
+            wrapperClass={Styles.SignInUpButton}
+          />
+        </form>
       </div>
       <div className={Styles.BottomSecWrapper}>
         <BottomText data={DsignUpData} />
