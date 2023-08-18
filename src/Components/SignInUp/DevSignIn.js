@@ -64,7 +64,7 @@ function DevSignIn() {
         ClientID: elements.Cid.value,
         Secret: elements.Csecret.value,
         scope: elements.Scope.value,
-        AuthorizationCode: elements.Authcode.value,
+       
         RedirectURIs: urls,
       });
 
@@ -81,7 +81,7 @@ function DevSignIn() {
           ClientID: elements.Cid.value,
           Secret: elements.Csecret.value,
           scope: elements.Scope.value,
-          AuthorizationCode: elements.Authcode.value,
+          
           RedirectURIs: urls,
         }),
       };
@@ -123,10 +123,7 @@ function DevSignIn() {
       notify("Please enter your secret value", "warning");
       return false;
     }
-    if (formRef.current.elements.Authcode.value === "") {
-      notify("Please enter your authorization code", "warning");
-      return false;
-    }
+    
     if (formRef.current.elements.protocol.value === "") {
       notify("Please enter your protocol", "warning");
       return false;
@@ -206,14 +203,7 @@ function DevSignIn() {
             margin="dense"
             disabled={isDisabled}
           />
-          <StyledMUIInput
-            fullWidth
-            id="Authcode"
-            label="Authorization Code"
-            variant="standard"
-            margin="dense"
-            disabled={isDisabled}
-          />
+          
 
           <>
             <StyledMUIInput
