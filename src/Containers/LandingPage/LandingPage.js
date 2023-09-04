@@ -9,6 +9,8 @@ import { useSelector } from "react-redux";
 import LandingPageMainSec from "./../../Components/LandingPage/LandingPage";
 import Footer from './../../Components/Footer/Footer';
 import DevSignIn from "../../Components/SignInUp/DevSignIn";
+import VerifyEmail from "../../Components/SignInUp/VerifyEmail";
+import ForgetPassword from "../../Components/SignInUp/ForgetPassword";
 
 function LandingPage() {
   const Location = useLocation();
@@ -55,6 +57,8 @@ function LandingPage() {
         <SignIn />
         <SignUp />
         <DevSignIn/>
+        <VerifyEmail/>
+        <ForgetPassword/>
       </div>
     </>
   );

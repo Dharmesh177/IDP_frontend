@@ -64,7 +64,9 @@ function SignUp() {
         const res = await axios.post(BASE_URL+"/user", data);
         const message = res.data.message;
         notify(message)
+        history.push(`/verify`);
         // to-do : signup successful, redirect to login or email verification
+        
       }catch(error) {
         const errorMessage = error.response.data.message;
         notify(errorMessage)

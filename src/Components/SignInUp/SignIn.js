@@ -3,7 +3,7 @@ import Styles from "./SignInUp.module.css";
 
 import StyledMUIInput from "./Helpers/StyledMUIInput";
 
-import { useLocation, useHistory } from "react-router-dom";
+import { useLocation, useHistory, Link } from "react-router-dom";
 
 import Button from "../Button";
 import BottomText from "./Helpers/BottomText";
@@ -42,7 +42,10 @@ function SignIn() {
         console.log(token)
         // to-do : save the token to cookies or browser storage
         // to-do : display the success in the UI
+        notify("User Logged in successfully...")
         // to-do : redirect page to dashboard
+        history.push(`/profile`);
+        
       }catch(error) {
         const errorMessage = error.response.data.message;
         notify(errorMessage)
@@ -101,6 +104,14 @@ function SignIn() {
             autoComplete="current-password"
             disabled={isDisabled}
           />
+          <div className={Styles.TextBlack}>
+        
+        <Link
+          to={`/forgetpassword`}
+        >
+        Forget Password ?
+        </Link>
+      </div>
           <Button
             content="Continue"
             mainColor="linear-gradient(

@@ -1,3 +1,2 @@
-import Profile from "./UserProfile";
-
+import Profile from "./Profile";
 export default Profile;

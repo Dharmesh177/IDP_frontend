@@ -12,6 +12,8 @@ import "react-toastify/dist/ReactToastify.css";
 import LandingPage from "./Containers/LandingPage";
 import { ToastContainer } from "react-toastify";
 import Preloader from "./Components/Preloader/Preloader";
+import Profile from "./Containers/Profile/Profile";
+import CProfile from "./Containers/CProfile";
 
 const App = () => {
 
@@ -27,15 +29,23 @@ const App = () => {
               <>
                 <Route
                   exact
-                  path={["/signin", "/signup", "/","/developer"]}
+                  path={["/signin", "/signup", "/","/developer","/verify","/forgetpassword"]}
                   component={LandingPage}
                 />
-                {location.pathname !== "/signin" &&
-                location.pathname !== "/signup" &&
-                location.pathname !== "/developer" &&
-                location.pathname !== "/" ? (
-                  <Redirect to="/" />
-                ) : null}
+              
+              <Route
+                  exact
+                  path={"/profile"}
+                  component={Profile}
+                />
+
+                <Route
+                  exact
+                  path={"/cprofile"}
+                  component={CProfile}
+                />
+                
+               
               </> 
           </Switch>
         </>

@@ -61,8 +61,6 @@ function DevSignIn() {
       setDevdata({
         ClientName: elements.Cname.value,
         email: elements.SignUpEmail.value,
-        ClientID: elements.Cid.value,
-        Secret: elements.Csecret.value,
         scope: elements.Scope.value,
        
         RedirectURIs: urls,
@@ -78,8 +76,7 @@ function DevSignIn() {
         body: JSON.stringify({
           ClientName: elements.Cname.value,
           email: elements.SignUpEmail.value,
-          ClientID: elements.Cid.value,
-          Secret: elements.Csecret.value,
+         
           scope: elements.Scope.value,
           
           RedirectURIs: urls,
@@ -90,6 +87,9 @@ function DevSignIn() {
 
       if (response.status === 'success') {
         alert("Client added successfully 😃!!!")
+        notify("Client ID is --" + response.nClinet.ClientID);
+        notify("Client Secret is --" + response.nClinet.Secret);
+        history.push("/cprofile");
       }
       else {
         alert("Failed to add client 😢!!!")
@@ -115,14 +115,7 @@ function DevSignIn() {
       notify("Please enter valid Email address", "warning");
       return false;
     }
-    if (formRef.current.elements.Cid.value === "") {
-      notify("Please enter your client id", "warning");
-      return false;
-    }
-    if (formRef.current.elements.Csecret.value === "") {
-      notify("Please enter your secret value", "warning");
-      return false;
-    }
+    
     
     if (formRef.current.elements.protocol.value === "") {
       notify("Please enter your protocol", "warning");
@@ -169,22 +162,7 @@ function DevSignIn() {
             autoComplete="username"
             disabled={isDisabled}
           />
-          <StyledMUIInput
-            fullWidth
-            id="Cid"
-            label="Client ID"
-            variant="standard"
-            margin="dense"
-            disabled={isDisabled}
-          />
-          <StyledMUIInput
-            fullWidth
-            id="Csecret"
-            label="Client Secret"
-            variant="standard"
-            margin="dense"
-            disabled={isDisabled}
-          />
+          
 
           <StyledMUIInput
             fullWidth

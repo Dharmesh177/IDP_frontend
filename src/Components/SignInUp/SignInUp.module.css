@@ -26,12 +26,28 @@
   font-weight: 600;
   color: var(--black);
 }
-
+.subtitle {
+  font-size: var(--font-23);
+  font-weight: 400;
+  color: var(--black);
+}
 .Form {
   width: 30rem;
   margin-top: 3rem;
 }
-
+.TextBlack {
+  font-weight: 500;
+  color: var(--black);
+  font-size: var(--font-15);
+  margin: auto;
+}
+.TextOrange {
+  font-weight: 600;
+  color: var(--primary-blue);
+  font-size: var(--font-15);
+  padding-left: 0.5rem;
+  text-decoration: none;
+}
 .RadioWrapper {
   margin-top: 0.8rem;
   margin-bottom: 0.4rem;
