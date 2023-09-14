@@ -50,21 +50,19 @@ function SignUp() {
     if (inputValidation) {
       setIsDisabled(true);
       const data = {
-        FirstName: elements.FirstName.value.trim(),
-        LastName: elements.LastName.value.trim(),
-        Email: elements.SignUpEmail.value.trim(),
-        ContactNo: elements.Mobile.value.trim(),
-        Password: elements.SignUpPassword.value.trim(),
-        ProfilePhoto: "https://avatars.githubusercontent.com/u/51825251?v=4",
-      };
+        FirstName : elements.FirstName.value.trim(),
+        LastName : elements.LastName.value.trim(),
+        Email : elements.SignUpEmail.value.trim(),
+        ContactNo : elements.Mobile.value.trim(),
+        Password : elements.SignUpPassword.value.trim(),
+      }
 
       try {
         const res = await axios.post(BASE_URL + "/user", data);
         const message = res.data.message;
-        notify(message);
-        history.push(`/verify`);
-        // to-do : signup successful, redirect to login or email verification
-      } catch (error) {
+        notify(message)
+        history.push(`/verify`, { email : data.Email });        
+      }catch(error) {
         const errorMessage = error.response.data.message;
         notify(errorMessage);
         setIsDisabled(false);

@@ -1,17 +1,9 @@
 import React, { useEffect } from "react";
 import { useLocation, useHistory } from "react-router-dom";
-
 import Styles from "./LandingPage.module.css";
-
-import SignIn from "./../../Components/SignInUp/SignIn";
-import SignUp from "./../../Components/SignInUp/SignUp";
-import { useSelector } from "react-redux";
 import LandingPageMainSec from "./../../Components/LandingPage/LandingPage";
 import Footer from './../../Components/Footer/Footer';
-import DevSignIn from "../../Components/SignInUp/DevSignIn";
-import VerifyEmail from "../../Components/SignInUp/VerifyEmail";
-import ForgetPassword from "../../Components/SignInUp/ForgetPassword";
-import SelectUser from "../../Components/SignInUp/SelectUser";
+import EmailTokenVerification from "../../Components/SignInUp/EmailTokenVerification";
 
 function LandingPage() {
   const Location = useLocation();
@@ -55,12 +47,7 @@ function LandingPage() {
           pointerEvents: Location.pathname != "/" ? "all" : "none",
         }}
       >
-        <SignIn />
-        <SignUp />
-        <DevSignIn/>
-        <VerifyEmail/>
-        <ForgetPassword/>
-        <SelectUser />
+        <EmailTokenVerification />
       </div>
     </>
   );

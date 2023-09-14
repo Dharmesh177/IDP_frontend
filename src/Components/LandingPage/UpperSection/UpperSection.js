@@ -10,11 +10,11 @@ function UpperSection() {
   const history = useHistory();
 
   const goToSignUp = () => {
-    history.push("/developer");
+    history.push("/SelectUser", true);
   };
 
   const goToSignIn = () => {
-    history.push("/signin");
+    history.push("/SelectUser", false);
   };
   return (
     <div className={styles.Wrapper}>
@@ -36,7 +36,7 @@ function UpperSection() {
             <Button
               wrapperClass={styles.ButtonStyle2}
               isNotBorder
-              content="User Login"
+              content="Login"
               onClick={goToSignIn}
             />
           </div>

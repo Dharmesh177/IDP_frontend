@@ -14,6 +14,7 @@ import { ToastContainer } from "react-toastify";
 import Preloader from "./Components/Preloader/Preloader";
 import Profile from "./Containers/Profile/Profile";
 import CProfile from "./Containers/CProfile";
+import LandingPage2 from "./Containers/EmailTokenVerification";
 
 const App = () => {
 
@@ -29,7 +30,7 @@ const App = () => {
               <>
                 <Route
                   exact
-                  path={["/signin", "/signup", "/","/developer","/verify","/forgetpassword"]}
+                  path={["/signin", "/signup", "/","/developer","/verify","/forgetpassword", "/SelectUser"]}
                   component={LandingPage}
                 />
               
@@ -44,8 +45,12 @@ const App = () => {
                   path={"/cprofile"}
                   component={CProfile}
                 />
-                
-               
+
+                <Route
+                  exact
+                  path={"/emailVerification"}
+                  component={LandingPage2}
+                />
               </> 
           </Switch>
         </>

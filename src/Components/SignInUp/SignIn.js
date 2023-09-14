@@ -39,12 +39,17 @@ function SignIn() {
         })
 
         const token = res.data.token;
+        const emailVerified = res.data.emailStatus;
         console.log(token)
-        // to-do : save the token to cookies or browser storage
-        // to-do : display the success in the UI
-        notify("User Logged in successfully...")
-        // to-do : redirect page to dashboard
-        history.push(`/profile`);
+        if (emailVerified) {
+          // to-do : save the token to cookies or browser storage
+          // to-do : display the success in the UI
+          notify("User Logged in successfully...")
+          // to-do : redirect page to dashboard
+          history.push(`/profile`);
+        } else {
+          history.push(`/verify`, { email : email });        
+        }
         
       }catch(error) {
         const errorMessage = error.response.data.message;
