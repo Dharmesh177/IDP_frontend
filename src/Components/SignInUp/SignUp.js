@@ -22,13 +22,12 @@ import { validateEmail } from "./Helpers/ValidateEmail";
 import axios from "axios";
 import { BASE_URL } from "../../configs";
 
-
 function SignUp() {
   const location = useLocation();
   const formRef = React.useRef(123);
   const history = useHistory();
   const [isDisabled, setIsDisabled] = React.useState(false);
-  const [isStationSelected,setIsStationSelected] = React.useState(false)
+  const [isStationSelected, setIsStationSelected] = React.useState(false);
 
   const [values, setValues] = React.useState({
     textmask: "",
@@ -36,7 +35,6 @@ function SignUp() {
     Mobile: "",
   });
 
-  
   const handleChange = (event) => {
     setValues({
       ...values,
@@ -52,24 +50,23 @@ function SignUp() {
     if (inputValidation) {
       setIsDisabled(true);
       const data = {
-        FirstName : elements.FirstName.value.trim(),
-        LastName : elements.LastName.value.trim(),
-        Email : elements.SignUpEmail.value.trim(),
-        ContactNo : elements.Mobile.value.trim(),
-        Password : elements.SignUpPassword.value.trim(),
-        ProfilePhoto : "https://avatars.githubusercontent.com/u/51825251?v=4"
-      }
+        FirstName: elements.FirstName.value.trim(),
+        LastName: elements.LastName.value.trim(),
+        Email: elements.SignUpEmail.value.trim(),
+        ContactNo: elements.Mobile.value.trim(),
+        Password: elements.SignUpPassword.value.trim(),
+        ProfilePhoto: "https://avatars.githubusercontent.com/u/51825251?v=4",
+      };
 
       try {
-        const res = await axios.post(BASE_URL+"/user", data);
+        const res = await axios.post(BASE_URL + "/user", data);
         const message = res.data.message;
-        notify(message)
+        notify(message);
         history.push(`/verify`);
         // to-do : signup successful, redirect to login or email verification
-        
-      }catch(error) {
+      } catch (error) {
         const errorMessage = error.response.data.message;
-        notify(errorMessage)
+        notify(errorMessage);
         setIsDisabled(false);
       }
     }
@@ -85,24 +82,23 @@ function SignUp() {
     const pass = elements.SignUpPassword.value.trim();
     const confirmPass = elements.ConfirmPassword.value.trim();
 
-
     if (firstName.length < 2 || firstName.length > 20) {
-      notify("FisrtName length must be between 2 & 20")
+      notify("FisrtName length must be between 2 & 20");
       return false;
     }
 
     if (lastName.length < 2 || lastName.label > 20) {
-      notify("LastName length must be between 2 & 20")
+      notify("LastName length must be between 2 & 20");
       return false;
     }
 
     if (email.length < 5 || email.length > 40) {
-      notify("Enter Valid Email")
+      notify("Enter Valid Email");
       return false;
     }
-    
+
     if (mobile.length != 10) {
-      notify("Enter Valid Contact No")
+      notify("Enter Valid Contact No");
       return false;
     }
 
@@ -172,6 +168,27 @@ function SignUp() {
             margin="dense"
             disabled={isDisabled}
           />
+          <h4
+            style={{
+              fontSize: "var(--font-16)",
+              fontWeight: 400,
+              color: "var(--ter-black)",
+              marginTop: "2px",
+            }}
+          >
+            Upload Profile Picture
+          </h4>
+          <StyledMUIInput
+            fullWidth
+            id="profilepic"
+            style={{ color: "var(--primary-blue)" }}
+            // label="Upload Profile Picture"
+            variant="standard"
+            type="file"
+            // margin="dense"
+            autoComplete="profile photo"
+            disabled={isDisabled}
+          />
           <StyledMUIInput
             fullWidth
             id="SignUpPassword"
@@ -192,8 +209,8 @@ function SignUp() {
             autoComplete="current-password"
             disabled={isDisabled}
           />
-        
-         <Button
+
+          <Button
             content="Continue"
             mainColor="linear-gradient(
               63.31deg,
