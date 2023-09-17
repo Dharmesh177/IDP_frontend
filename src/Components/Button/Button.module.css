@@ -10,7 +10,7 @@
   cursor: pointer;
   border-radius: 0.4rem;
   color: var(--black);
-  border-radius: 999px;
+  border-radius: 1rem;
   background: var(--main-color);
   transition: box-shadow 0.15s ease-in-out;
   font-family: "Manrope", sans-serif;
