@@ -33,7 +33,7 @@ const SelectUser = () => {
         }
 
         if (isRegistration) {
-            history.push("/singup");
+            history.push("/signup");
         } else {
             history.push("/signin");
         }

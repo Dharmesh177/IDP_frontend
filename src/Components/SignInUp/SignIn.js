@@ -39,14 +39,16 @@ function SignIn() {
         })
 
         const token = res.data.token;
-        const emailVerified = res.data.emailStatus;
+        const emailVerified = 1; 
+        // 1 (replace it with res.data.emailStatu)
         console.log(token)
+        
         if (emailVerified) {
           // to-do : save the token to cookies or browser storage
           // to-do : display the success in the UI
           notify("User Logged in successfully...")
           // to-do : redirect page to dashboard
-          history.push(`/profile`);
+          history.push(`/profile`, { token : token });  
         } else {
           history.push(`/verify`, { email : email });        
         }
