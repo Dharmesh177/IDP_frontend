@@ -47,6 +47,12 @@ function VerifyEmail() {
     }
   }
 
+  useEffect(() => {
+    setMessage("Link will be sent to your registered email")
+    setTitle("Verification of Email Needed!")
+    setIsSent(false)
+  }, [])
+
   return (
     <>
       {data !== undefined ?  (

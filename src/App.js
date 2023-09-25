@@ -30,7 +30,7 @@ const App = () => {
               <>
                 <Route
                   exact
-                  path={["/signin", "/signup", "/","/developer","/verify","/forgetpassword", "/SelectUser"]}
+                  path={["/signin", "/signup", "/","/developer","/verify","/forgetpassword", "/SelectUser", "/resetPassword"]}
                   component={LandingPage}
                 />
               
