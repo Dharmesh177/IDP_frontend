@@ -68,20 +68,12 @@ export const PROFILE_DATA = {
       title: "Personal Information",
       to: "/"
     },
-    {
-      title: "Access Rights Control",
-      to: "/"
-    }
   ],
   links2: [
     {
       title: "Client Credential",
       to: "/"
     },
-    {
-      title: "Client Information",
-      to: "/ClientInfo"
-    }
   ],
   personalInfoSec: {
     title: "Personal Information",

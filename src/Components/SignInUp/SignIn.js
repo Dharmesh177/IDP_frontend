@@ -26,7 +26,7 @@ function SignIn() {
 
   const [isDisabled, setIsDisabled] = React.useState(false);
 
-  const signIn = async (e) => {
+  const signIn = async (e) => {   
     e.preventDefault();
     if (validateData()) {
       const email = formRef.current.elements.SignInEmail.value;
@@ -37,13 +37,15 @@ function SignIn() {
           Email : email,
           Password : pass 
         })
-
+        // console.log("herrr" );
+        // console.log(res)
         const token = res.data.token;
-        const emailVerified = 1; 
+        const emailVerified = res.data.emailStaus; 
         // 1 (replace it with res.data.emailStatu)
-        console.log(token)
-        
+        // console.log(token)
+        // console.log(emailVerified)
         if (emailVerified) {
+
           // to-do : save the token to cookies or browser storage
           // to-do : display the success in the UI
           notify("User Logged in successfully...")

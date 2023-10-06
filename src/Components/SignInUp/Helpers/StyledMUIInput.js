@@ -1,7 +1,7 @@
 import React from "react";
 
 import { styled } from "@mui/material/styles";
-import { TextField } from "@mui/material";
+import { Checkbox, TextField } from "@mui/material";
 import Radio from "@mui/material/Radio";
 
 import { IMaskInput } from "react-imask";
@@ -74,6 +74,22 @@ function CustomisedRadio(props) {
     />
   );
 }
+function CustomisedCheckBox(props) {
+  return (
+    <Checkbox
+      sx={{
+        color:"var(--primary-blue)",
+        "&.Mui-checked": {
+          color:"var(--primary-blue)",
+        },
+        "& .MuiSvgIcon-root": {
+          fontSize: "var(--font-22)",
+        },
+      }}
+      {...props}
+    />
+  );
+}
 
 const selectColorStyles = {
   control: (styles) => ({
@@ -119,4 +135,5 @@ export {
   MobileNumberTextMask,
   CustomisedRadio,
   selectColorStyles as colourStyles,
+  CustomisedCheckBox
 };

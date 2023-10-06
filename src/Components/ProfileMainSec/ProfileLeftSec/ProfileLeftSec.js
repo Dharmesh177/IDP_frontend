@@ -1,15 +1,15 @@
-import React from "react";
+import {React,useState, useEffect} from "react";
 import { NavLink, useLocation, useHistory } from "react-router-dom";
 import { ReactComponent as Arrow } from "../../../Assets/Profile/Arrow.svg";
 import styles from "./ProfileLeftSec.module.css";
-
+import { BASE_URL } from "../../../configs";
 import { PROFILE_DATA } from "../../../Utils/Constants/StaticData";
 
 import Button from "../../Button2/Button";
 
 
 function ProfileLeftSec() {
-  const location = useLocation();
+  
   const history = useHistory();
 
   
@@ -28,8 +28,41 @@ function ProfileLeftSec() {
     //     console.log(error);
     //   });
   };
+  const [udata, setUdata] = useState(null);
+
+  const location = useLocation();
+  const t = location.state;
+
+  console.log("data is");
+  console.log(t);
+  const queryParameter = new URLSearchParams(window.location.search);
+  // const token = data.token;
+
+  const sendd = async () => {
+    console.log("Start");
+    const response = await fetch(BASE_URL + "/user/mySelf", {
+      method: "GET",
+      headers: {
+        authorization: `Bearer ${t.token}`,
+      },
+    });
+
+    const result = await response.json();
+    console.log("---");
+
+    console.log(result.data[0]);
+
+    setUdata(result.data[0]);
+    console.log(udata);
+  };
+
+  useEffect(() => {
+    sendd();
+  }, []);
 
   return (
+    <>
+    {udata === null ? undefined : (
     <div className={styles.Wrapper}>
       <div className={styles.BackButtonWrapper}>
         <Button
@@ -55,8 +88,8 @@ function ProfileLeftSec() {
           }}
         />
         <div className={styles.InfoSec}>
-          <h4 className={styles.Name}>Dharmesh</h4>
-          <span className={styles.Email}>Dvala453@gmail.com</span>
+          <h4 className={styles.Name}>{udata.FirstName}</h4>
+          <span className={styles.Email}>{udata.Email}</span>
         </div>
       </div>
 
@@ -98,6 +131,8 @@ function ProfileLeftSec() {
         </div>
       </div>
     </div>
+    )}
+    </>
   );
 }
 

@@ -8,6 +8,7 @@ import { ReactComponent as PlusImg } from "../../../../Assets/Profile/Plus.svg";
 import DeleteIcon from '@mui/icons-material/Delete';
 import ReportIcon from '@mui/icons-material/Report';
 import notify from "../../../../Utils/helper/notifyToast";
+import { useLocation } from "react-router-dom/cjs/react-router-dom.min";
 
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import styles from "./Bookings.module.css";
@@ -18,12 +19,46 @@ function ClientCredential() {
     const [clientId,setClientId] = useState("15454d5c4v5cv5sdv4df5");
     const [clientSecret, setClientSecret] = useState("dsvdfv4dFdvdf4d5f45d4d5v4dv");
 
+    const [udata, setUdata] = useState(null);
+    const location = useLocation();
+    const t = location.state;
+
+  console.log("data is");
+  console.log(t);
+
   const [copied, setCopied] = React.useState(false);
   const [copied2, setCopied2] = React.useState(false);
   const onCopy = React.useCallback(() => {
     setCopied(true);
     notify("Client ID Copied !!")
   }, [])
+
+  const sendd = async () => {
+    console.log("Start");
+    const response = await fetch( "/user/mySelf", {
+      method: "GET",
+      headers: {
+        authorization: `Bearer ${t.token}`,
+      },
+    });
+
+    const result = await response.json();
+    console.log("---");
+
+    console.log(result.data[0]);
+
+    setUdata(result.data[0]);
+    console.log(udata);
+  }; 
+
+  const handleDiscard = async ()=>{
+    sendd();
+    notify("Data reset successfully!!")
+  }
+
+  useEffect(() => {
+    sendd();
+  }, []);
 
   const onCopy2 = React.useCallback(() => {
     setCopied2(true);

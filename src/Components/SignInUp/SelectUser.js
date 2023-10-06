@@ -21,9 +21,9 @@ const SelectUser = () => {
         }
 
         if (isRegistration) {
-            history.push("/developer");
+            history.push("/clientsignup");
         } else {
-            history.push("/developer");
+            history.push("/clientsignin");
         }
     }
 

@@ -55,8 +55,8 @@
 }
 
 .BottomItem {
-  --primary-text-color: var(--primary-orange);
-  --background-color: var(--trans-orange-bg);
+  --primary-text-color: var(----ter-black);
+  --background-color: "var(--primary-blue)";
 
   color: var(--sec-black);
   font-size: var(--font-16);
@@ -72,7 +72,7 @@
 .BottomItemActive,
 .BottomItem:hover {
   color: var(--primary-text-color);
-  background-color: var(--background-color);
+  background-color: #4a9ae34f;
 }
 
 .BackButton {

@@ -10,8 +10,12 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import {
   MobileNumberTextMask,
   CustomisedRadio,
+  CustomisedCheckBox
 } from "./Helpers/StyledMUIInput";
-
+import FormLabel from '@mui/material/FormLabel';
+import FormControl from '@mui/material/FormControl';
+import FormGroup from '@mui/material/FormGroup';
+import Checkbox from '@mui/material/Checkbox';
 import Buttonn from "../Button";
 import BottomText from "./Helpers/BottomText";
 
@@ -21,7 +25,7 @@ import notify from "../../Utils/helper/notifyToast";
 import { validateEmail } from "./Helpers/ValidateEmail";
 
 function DevSignIn() {
-  const location = useLocation();
+
   const formRef = React.useRef(123);
   const history = useHistory();
   const [isDisabled, setIsDisabled] = React.useState(false);
@@ -30,15 +34,12 @@ function DevSignIn() {
   const [shown, setshown] = React.useState(false);
   const [urls, seturls] = React.useState([]);
   const [devData, setDevdata] = React.useState({});
+  // const [access,setaccess] = React.useState([]);
 
-  // const sendRequest = async () => {
-  //     const res = await axios
-  //     .post("http://localhost:5000/api/client/insertClient", devData)
-  //     .catch((err) => console.log(err));
-  //   console.log(res);
-  //   const dat = await res.nClinet;
-  //   return dat;
-  // };
+  const access = [];
+
+    const location = useLocation();
+    const t = location.state;
 
   const handleAdd = (event) => {
     const elements = formRef.current.elements;
@@ -51,6 +52,19 @@ function DevSignIn() {
     console.log(urls);
   };
 
+  const handleChange = (e) => {
+    console.log(access);
+    if(access.includes(e.target.value)){
+      const idx = access.indexOf(e.target.value);
+      access.splice(idx,1);
+    }else{
+      access.push(e.target.value);
+    }
+    console.log("after change");
+      console.log(access);
+  };
+
+
   const signUp = async (e) => {
     e.preventDefault();
     const inputValidation = handleDataValidation();
@@ -60,7 +74,6 @@ function DevSignIn() {
       setIsDisabled(true);
       setDevdata({
         ClientName: elements.Cname.value,
-        email: elements.SignUpEmail.value,
         scope: elements.Scope.value,
        
         RedirectURIs: urls,
@@ -69,37 +82,24 @@ function DevSignIn() {
       console.log("Developer data is here");
       console.log(devData);
 
-      const requrl = "http://localhost:5000/api/client/insertClient";
-      const reqOptions = {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ClientName: elements.Cname.value,
-          email: elements.SignUpEmail.value,
-         
-          scope: elements.Scope.value,
-          
-          RedirectURIs: urls,
-        }),
-      };
-      const result = await fetch(requrl, reqOptions);
-      const response = await result.json();
+      const res = await axios.post("http://localhost:5000/api/client/insertClient", {
+        ClientID : t.ClientID,
+        name: elements.Cname.value,         
+        scope: elements.Scope.value,
+        protocol: elements.protocol.value,   
+        RedirectURIs: urls,
+        access: access
+        })
+      
+      // const response = await result.json();
 
-      if (response.status === 'success') {
-        alert("Client added successfully 😃!!!")
-        notify("Client ID is --" + response.nClinet.ClientID);
-        notify("Client Secret is --" + response.nClinet.Secret);
+      if (res.data.status === 'success') {
+        notify("Client added successfully 😃!!!");
         history.push("/cprofile");
       }
       else {
-        alert("Failed to add client 😢!!!")
+        notify("Failed to add client 😢!!!");
       }
-      // sendRequest()
-      // .then((data) => {
-      //   console.log(data);
-      //   window.location = "/";
-      // })
-      // .then(() => console.log("done"));
     }
   };
 
@@ -108,14 +108,6 @@ function DevSignIn() {
       notify("Please enter your name", "warning");
       return false;
     }
-    if (
-      !formRef.current.elements.SignUpEmail.value ||
-      !validateEmail(formRef.current.elements.SignUpEmail.value)
-    ) {
-      notify("Please enter valid Email address", "warning");
-      return false;
-    }
-    
     
     if (formRef.current.elements.protocol.value === "") {
       notify("Please enter your protocol", "warning");
@@ -127,6 +119,10 @@ function DevSignIn() {
     }
     if (formRef.current.elements.redirecturl.value === "") {
       notify("Please enter your redirect url", "warning");
+      return false;
+    }
+    if(access.length == 0){
+      notify("Checkmark required access's", "warning");
       return false;
     }
     return true;
@@ -145,23 +141,25 @@ function DevSignIn() {
       <div className={Styles.UpperSection}>
         <span className={Styles.Title}>{DsignUpData.title}</span>
         <form ref={formRef} className={Styles.Form} onSubmit={signUp}>
-          <StyledMUIInput
+        <StyledMUIInput
+            fullWidth
+            id="ClientID"
+            label="Client ID"
+            variant="standard"
+            type="text"
+            margin="dense"
+            autoComplete="username"
+            disabled={isDisabled}
+            value = {t!=null ? t.ClientID : " s"}
+          /> 
+        <StyledMUIInput
             fullWidth
             id="Cname"
             label="Client Name"
             variant="standard"
             disabled={isDisabled}
           />
-          <StyledMUIInput
-            fullWidth
-            id="SignUpEmail"
-            label="Email address"
-            variant="standard"
-            type="email"
-            margin="dense"
-            autoComplete="username"
-            disabled={isDisabled}
-          />
+          
           
 
           <StyledMUIInput
@@ -197,7 +195,85 @@ function DevSignIn() {
               style={{ fontSize: "3rem", margin: "1rem", color: "blue" }}
             />
           </>
+        <br/>
 
+        <Typography
+              sx={{ fontSize: "var(--font-16)", fontWeight: 400 }}
+            >
+            Access Required
+            </Typography>
+
+      <FormControlLabel
+          disabled={isDisabled}
+          id="1"
+          value="FirstName"
+          control={<CustomisedCheckBox />}
+          onChange={handleChange}
+          label={
+            <Typography
+              sx={{ fontSize: "var(--font-16)", fontWeight: 400 }}
+            >
+            FirstName
+            </Typography>
+          }
+        />
+        <FormControlLabel
+              disabled={isDisabled}
+              value="LastName"
+              id="2"
+              control={<CustomisedCheckBox  />}
+              onChange={handleChange}
+              label={
+                <Typography
+                  sx={{ fontSize: "var(--font-16)", fontWeight: 400 }}
+                >
+                LastName
+                </Typography>
+              }
+            />
+            <FormControlLabel
+              disabled={isDisabled}
+              value="Email"
+              id="3"
+              control={<CustomisedCheckBox  />}
+              onChange={handleChange}
+              label={
+                <Typography
+                  sx={{ fontSize: "var(--font-16)", fontWeight: 400 }}
+                >
+                Email
+                </Typography>
+              }
+            />
+            <FormControlLabel
+              disabled={isDisabled}
+              value="ContactNo"
+              id="4"
+              control={<CustomisedCheckBox />}
+              onChange={handleChange}
+              label={
+                <Typography
+                  sx={{ fontSize: "var(--font-16)", fontWeight: 400 }}
+                >
+                ContactNo
+                </Typography>
+              }
+            />
+            <FormControlLabel
+            disabled={isDisabled}
+            value="ProfilePhoto"
+            id="5"
+            control={<CustomisedCheckBox  />}
+            onChange={handleChange}
+            label={
+              <Typography
+                sx={{ fontSize: "var(--font-16)", fontWeight: 400 }}
+              >
+              ProfilePhoto
+              </Typography>
+            }
+          />
+               
           <Buttonn
             content="Continue"
             mainColor="linear-gradient(

@@ -6,7 +6,7 @@ import styles from "./Navbar.module.css";
 import { ReactComponent as Logo } from "../../Assets/_General/evian.svg";
 import DefaultImage from "../../Assets/_General/DefaultImg.png";
 
-function Navbar() {
+function Navbar(props) {
    const history = useHistory();
 
   const handleClickHomePage = () => {
@@ -40,7 +40,7 @@ function Navbar() {
             }}
           />
           
-          <span className={styles.UserName}>Dharmesh</span>
+          <span className={styles.UserName}>{props.namee}</span>
         </div>
       </div>
     </div>

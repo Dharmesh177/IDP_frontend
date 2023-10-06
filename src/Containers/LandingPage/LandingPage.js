@@ -13,6 +13,7 @@ import VerifyEmail from "../../Components/SignInUp/VerifyEmail";
 import ForgetPassword from "../../Components/SignInUp/ForgetPassword";
 import SelectUser from "../../Components/SignInUp/SelectUser";
 import ResetPassword from "../../Components/SignInUp/ResetPassword";
+import { ClientSignIn, ClientSignUp } from "../../Components/SignInUp";
 
 function LandingPage() {
   const Location = useLocation();
@@ -63,6 +64,8 @@ function LandingPage() {
         <ForgetPassword/>
         <SelectUser />
         <ResetPassword />
+        <ClientSignIn/>
+        <ClientSignUp/>
       </div>
     </>
   );

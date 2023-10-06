@@ -15,6 +15,23 @@ export const signUpData = {
     },
   },
 };
+export const CsignUpData = {
+  title: "Client Registration",
+  bottomContent: {
+    upperText: {
+      title: "Already have an account?",
+      link: "Sign In",
+      linkTo: "/clientsignin",
+    },
+    bottomText: {
+      title: "By signing up you agree to IndieFoods's",
+      link: "Terms of Service",
+      link2: " Privacy Policy",
+      linkTo: "/terms",
+      linkTo2: "/privacy",
+    },
+  },
+};
 export const DsignUpData = {
   title: "Developer Registration",
   bottomContent: {
@@ -40,6 +57,23 @@ export const signInData = {
       title: "Don't have an account?",
       link: "Sign Up",
       linkTo: "/signup",
+    },
+    bottomText: {
+      title: "By clicking on Continue, you agree to IndieFoods's",
+      link: "Terms of Service",
+      link2: " Privacy Policy",
+      linkTo: "/terms",
+      linkTo2: "/privacy",
+    },
+  },
+};
+export const CsignInData = {
+  title: "Client Login",
+  bottomContent: {
+    upperText: {
+      title: "Don't have an account?",
+      link: "Sign Up",
+      linkTo: "/clientsignup",
     },
     bottomText: {
       title: "By clicking on Continue, you agree to IndieFoods's",
