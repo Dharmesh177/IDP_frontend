@@ -19,6 +19,7 @@ function PersonalInfoSec(props) {
   const [states, setstate] = useState("Gujarat");
  
   const [udata, setUdata] = useState(null);
+  const [rows, setRows] = useState([])
   const history = useHistory();
   const location = useLocation();
   const t = location.state;
@@ -43,8 +44,33 @@ function PersonalInfoSec(props) {
     console.log(result.data[0]);
 
     setUdata(result.data[0]);
-    console.log(udata);
   };
+
+  const fetchHistory = async () => {
+    setRows([])
+    const response = await fetch(BASE_URL + "/user/myAccessHistory", {
+      method: "GET",
+      headers: {
+        authorization: `Bearer ${t.token}`
+      }
+    })
+
+    const result = await response.json();
+    const map = result.data;
+
+    let myData = []
+    let count = Object.keys(map).length
+
+    for (let key in map) {
+      let newKey = key.replace(/\_dot_/g, ".")
+      let value = map[key]
+      myData.push({ id : count, website : newKey, datause: value })
+      count -= 1
+    }
+
+    myData.reverse()
+    setRows(myData)
+  }
 
   const handleClick = async () => {
     const response = await fetch(BASE_URL + "/user/mySelf", {
@@ -73,6 +99,7 @@ function PersonalInfoSec(props) {
 
   useEffect(() => {
     sendd();
+    fetchHistory();
   }, []);
 
   const columns = [
@@ -81,15 +108,6 @@ function PersonalInfoSec(props) {
     { field: "datause", headerName: "Data Using", width: 350 },
    
    
-  ];
-
-  const rows = [
-    { id: 1, website: "www.authify.in", datause: "[Email, FirstName, LastName]" },
-    { id: 2, website: "www.manavtanimahek.000webhost.in", datause: "[Email, FirstName, ContactNo]" },
-    { id: 3, website: "www.dharmeshvala.onrender.in", datause: "[Email, FirstName, ContactNo]"  },
-    { id: 4, website: "www.bvmengineering.com", datause: "[Email, FirstName, LatName, ProfilePhoto]" },
-    { id: 5, website: "www.aicte.com", datause: "[Email, FirstName, LastName]"},
-    
   ];
 
   return (
@@ -183,19 +201,7 @@ function PersonalInfoSec(props) {
               <h4 className={styles.AddressTitle}>
                 Access History
               </h4>
-
-              <div>
-              <Button
-                name=""
-                primaryColor={`var(--redd)`}
-                inverted
-                hoverBgColor={`var(--white)`}
-                wrapperClass={styles.DeleteAcc}
-                withIcon
-                IconComp={DeleteIcon}
-              />
-              </div>
-              </div>
+            </div>
 
               <div style={{ height: 400, width: "100%" }}>
                 <DataGrid
@@ -203,11 +209,11 @@ function PersonalInfoSec(props) {
                   columns={columns}
                   initialState={{
                     pagination: {
-                      paginationModel: { page: 0, pageSize: 5 },
+                      paginationModel: { pageSize: 5 },
                     },
                   }}
-                  pageSizeOptions={[5, 10]}
                   checkboxSelection
+                  pagination={true}
                   sx={{
                     color:"var(black)",
                     fontSize: 16,
