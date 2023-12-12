@@ -1,4 +1,4 @@
-import React from "react";
+import {React,useState,useEffect} from "react";
 import { NavLink, useLocation, useHistory } from "react-router-dom";
 import { ReactComponent as Arrow } from "../../../Assets/Profile/Arrow.svg";
 import styles from "./ProfileLeftSec.module.css";
@@ -9,25 +9,15 @@ import Button from "../../Button2/Button";
 
 
 function ProfileLeftSecDev() {
-  const location = useLocation();
   const history = useHistory();
-
-  
+  const [udata, setUdata] = useState(null);
   const logout = () => {
-    // const auth = getAuth();
-    // signOut(auth)
-    //   .then(() => {
-    //     console.log("signed out");
-    //     dispatch({
-    //       type: UPDATE_USER_DATA,
-    //       data: null,
-    //     });
-    //     history.push("/login");
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
+    //////
   };
+  const location = useLocation();
+ 
+
+
 
   return (
     <div className={styles.Wrapper}>
@@ -55,8 +45,8 @@ function ProfileLeftSecDev() {
           }}
         />
         <div className={styles.InfoSec}>
-          <h4 className={styles.Name}>Dharmesh</h4>
-          <span className={styles.Email}>Dvala453@gmail.com</span>
+          <h4 className={styles.Name}> Developer </h4>
+          <span className={styles.Email}>support@authify.com</span>
         </div>
       </div>
 

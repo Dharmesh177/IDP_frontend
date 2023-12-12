@@ -46,7 +46,7 @@ function ClientSignIn() {
             notify("You are logged succesffuly 🎊 !!");
             notify("Your Client ID is " + res.data.client.ClientID);
             console.log(res.data)
-            history.push(`/developer`, { ClientID : res.data.client.ClientID });  
+            history.push(`/cprofile`, { ClientID : res.data.client.ClientID , token : res.data.token});  
     }else{
       notify("Error occred!!!")
     }

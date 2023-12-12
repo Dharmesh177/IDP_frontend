@@ -10,12 +10,12 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import {
   MobileNumberTextMask,
   CustomisedRadio,
-  CustomisedCheckBox
+  CustomisedCheckBox,
 } from "./Helpers/StyledMUIInput";
-import FormLabel from '@mui/material/FormLabel';
-import FormControl from '@mui/material/FormControl';
-import FormGroup from '@mui/material/FormGroup';
-import Checkbox from '@mui/material/Checkbox';
+import FormLabel from "@mui/material/FormLabel";
+import FormControl from "@mui/material/FormControl";
+import FormGroup from "@mui/material/FormGroup";
+import Checkbox from "@mui/material/Checkbox";
 import Buttonn from "../Button";
 import BottomText from "./Helpers/BottomText";
 
@@ -25,7 +25,6 @@ import notify from "../../Utils/helper/notifyToast";
 import { validateEmail } from "./Helpers/ValidateEmail";
 
 function DevSignIn() {
-
   const formRef = React.useRef(123);
   const history = useHistory();
   const [isDisabled, setIsDisabled] = React.useState(false);
@@ -38,8 +37,8 @@ function DevSignIn() {
 
   const access = [];
 
-    const location = useLocation();
-    const t = location.state;
+  const location = useLocation();
+  const t = location.state;
 
   const handleAdd = (event) => {
     const elements = formRef.current.elements;
@@ -54,16 +53,15 @@ function DevSignIn() {
 
   const handleChange = (e) => {
     console.log(access);
-    if(access.includes(e.target.value)){
+    if (access.includes(e.target.value)) {
       const idx = access.indexOf(e.target.value);
-      access.splice(idx,1);
-    }else{
+      access.splice(idx, 1);
+    } else {
       access.push(e.target.value);
     }
     console.log("after change");
-      console.log(access);
+    console.log(access);
   };
-
 
   const signUp = async (e) => {
     e.preventDefault();
@@ -72,33 +70,32 @@ function DevSignIn() {
 
     if (inputValidation) {
       setIsDisabled(true);
-      setDevdata({
-        ClientName: elements.Cname.value,
-        scope: elements.Scope.value,
-       
-        RedirectURIs: urls,
-      });
 
-      console.log("Developer data is here");
-      console.log(devData);
+      console.log("token in frontend" + t.token);
 
-      const res = await axios.post("http://localhost:5000/api/client/insertClient", {
-        ClientID : t.ClientID,
-        name: elements.Cname.value,         
-        scope: elements.Scope.value,
-        protocol: elements.protocol.value,   
-        RedirectURIs: urls,
-        access: access
-        })
-      
-      // const response = await result.json();
-
-      if (res.data.status === 'success') {
-        notify("Client added successfully 😃!!!");
-        history.push("/cprofile");
-      }
-      else {
-        notify("Failed to add client 😢!!!");
+      try {
+        const response = await fetch(
+          "http://localhost:5000/api/client/insertClient",
+          {
+            method: "POST",
+            body: JSON.stringify({
+              ClientID: t.ClientID,
+              name: elements.Cname.value,
+              scope: elements.Scope.value,
+              protocol: elements.protocol.value,
+              RedirectURIs: urls,
+              access: access,
+            }),
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${t.token}`,
+            },
+          }
+        );
+        notify("Data Inserted Successfully!!");
+        history.push(`/cprofile`, { ClientID : t.ClientID , token : t.token}); 
+      } catch (e) {
+        console.log(e);
       }
     }
   };
@@ -108,7 +105,7 @@ function DevSignIn() {
       notify("Please enter your name", "warning");
       return false;
     }
-    
+
     if (formRef.current.elements.protocol.value === "") {
       notify("Please enter your protocol", "warning");
       return false;
@@ -121,7 +118,7 @@ function DevSignIn() {
       notify("Please enter your redirect url", "warning");
       return false;
     }
-    if(access.length == 0){
+    if (access.length == 0) {
       notify("Checkmark required access's", "warning");
       return false;
     }
@@ -141,7 +138,7 @@ function DevSignIn() {
       <div className={Styles.UpperSection}>
         <span className={Styles.Title}>{DsignUpData.title}</span>
         <form ref={formRef} className={Styles.Form} onSubmit={signUp}>
-        <StyledMUIInput
+          <StyledMUIInput
             fullWidth
             id="ClientID"
             label="Client ID"
@@ -150,17 +147,15 @@ function DevSignIn() {
             margin="dense"
             autoComplete="username"
             disabled={isDisabled}
-            value = {t!=null ? t.ClientID : " s"}
-          /> 
-        <StyledMUIInput
+            value={t != null ? t.ClientID : " s"}
+          />
+          <StyledMUIInput
             fullWidth
             id="Cname"
             label="Client Name"
             variant="standard"
             disabled={isDisabled}
           />
-          
-          
 
           <StyledMUIInput
             fullWidth
@@ -179,7 +174,6 @@ function DevSignIn() {
             margin="dense"
             disabled={isDisabled}
           />
-          
 
           <>
             <StyledMUIInput
@@ -195,85 +189,73 @@ function DevSignIn() {
               style={{ fontSize: "3rem", margin: "1rem", color: "blue" }}
             />
           </>
-        <br/>
+          <br />
 
-        <Typography
-              sx={{ fontSize: "var(--font-16)", fontWeight: 400 }}
-            >
+          <Typography sx={{ fontSize: "var(--font-16)", fontWeight: 400 }}>
             Access Required
-            </Typography>
+          </Typography>
 
-      <FormControlLabel
-          disabled={isDisabled}
-          id="1"
-          value="FirstName"
-          control={<CustomisedCheckBox />}
-          onChange={handleChange}
-          label={
-            <Typography
-              sx={{ fontSize: "var(--font-16)", fontWeight: 400 }}
-            >
-            FirstName
-            </Typography>
-          }
-        />
-        <FormControlLabel
-              disabled={isDisabled}
-              value="LastName"
-              id="2"
-              control={<CustomisedCheckBox  />}
-              onChange={handleChange}
-              label={
-                <Typography
-                  sx={{ fontSize: "var(--font-16)", fontWeight: 400 }}
-                >
-                LastName
-                </Typography>
-              }
-            />
-            <FormControlLabel
-              disabled={isDisabled}
-              value="Email"
-              id="3"
-              control={<CustomisedCheckBox  />}
-              onChange={handleChange}
-              label={
-                <Typography
-                  sx={{ fontSize: "var(--font-16)", fontWeight: 400 }}
-                >
-                Email
-                </Typography>
-              }
-            />
-            <FormControlLabel
-              disabled={isDisabled}
-              value="ContactNo"
-              id="4"
-              control={<CustomisedCheckBox />}
-              onChange={handleChange}
-              label={
-                <Typography
-                  sx={{ fontSize: "var(--font-16)", fontWeight: 400 }}
-                >
-                ContactNo
-                </Typography>
-              }
-            />
-            <FormControlLabel
+          <FormControlLabel
             disabled={isDisabled}
-            value="ProfilePhoto"
-            id="5"
-            control={<CustomisedCheckBox  />}
+            id="1"
+            value="FirstName"
+            control={<CustomisedCheckBox />}
             onChange={handleChange}
             label={
-              <Typography
-                sx={{ fontSize: "var(--font-16)", fontWeight: 400 }}
-              >
-              ProfilePhoto
+              <Typography sx={{ fontSize: "var(--font-16)", fontWeight: 400 }}>
+                FirstName
               </Typography>
             }
           />
-               
+          <FormControlLabel
+            disabled={isDisabled}
+            value="LastName"
+            id="2"
+            control={<CustomisedCheckBox />}
+            onChange={handleChange}
+            label={
+              <Typography sx={{ fontSize: "var(--font-16)", fontWeight: 400 }}>
+                LastName
+              </Typography>
+            }
+          />
+          <FormControlLabel
+            disabled={isDisabled}
+            value="Email"
+            id="3"
+            control={<CustomisedCheckBox />}
+            onChange={handleChange}
+            label={
+              <Typography sx={{ fontSize: "var(--font-16)", fontWeight: 400 }}>
+                Email
+              </Typography>
+            }
+          />
+          <FormControlLabel
+            disabled={isDisabled}
+            value="ContactNo"
+            id="4"
+            control={<CustomisedCheckBox />}
+            onChange={handleChange}
+            label={
+              <Typography sx={{ fontSize: "var(--font-16)", fontWeight: 400 }}>
+                ContactNo
+              </Typography>
+            }
+          />
+          <FormControlLabel
+            disabled={isDisabled}
+            value="ProfilePhoto"
+            id="5"
+            control={<CustomisedCheckBox />}
+            onChange={handleChange}
+            label={
+              <Typography sx={{ fontSize: "var(--font-16)", fontWeight: 400 }}>
+                ProfilePhoto
+              </Typography>
+            }
+          />
+
           <Buttonn
             content="Continue"
             mainColor="linear-gradient(

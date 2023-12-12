@@ -66,7 +66,7 @@ export const PROFILE_DATA = {
   links: [
     {
       title: "Personal Information",
-      to: "/"
+      to: "/cprofile"
     },
   ],
   links2: [

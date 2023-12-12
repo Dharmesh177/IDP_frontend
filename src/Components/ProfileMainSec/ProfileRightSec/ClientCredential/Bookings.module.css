@@ -233,7 +233,7 @@
 margin: 2px;
   font-weight: 400;
   font-size: var(--font-15);
-  outline: 1px solid var(--light-green);
+  outline: 2px solid var(--primary-blue);
   padding: 0.8rem 1.5rem;
 }
 
